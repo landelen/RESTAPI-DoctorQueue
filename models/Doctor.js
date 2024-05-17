@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const PatientSchema = new mongoose.Schema({
+const DoctorSchema = new mongoose.Schema({
 	name: {
 		type: String,
 		required: [true, "Please provide name"],
@@ -24,6 +24,20 @@ const PatientSchema = new mongoose.Schema({
 		],
 		unique: true,
 	},
+	phone: {
+		countryCode: {
+			type: String,
+			required: [true, "Please provide country code"],
+			minlength: 1,
+			maxlength: 5,
+		},
+		phoneNumber: {
+			type: String,
+			required: [true, "Please provide phone number"],
+			minlength: 5,
+			maxlength: 15,
+		},
+	},
 	password: {
 		type: String,
 		required: [true, "Please provide password"],
@@ -32,19 +46,28 @@ const PatientSchema = new mongoose.Schema({
 	},
 });
 
-PatientSchema.pre("save", async function () {
+DoctorSchema.index(
+	{ "phone.countryCode": 1, "phone.phoneNumber": 1 },
+	{ unique: true }
+);
+
+DoctorSchema.pre("save", async function () {
 	const salt = await bcrypt.genSalt(10);
 	this.password = await bcrypt.hash(this.password, salt);
 });
 
-PatientSchema.methods.comparePassword = async function (canditatePassword) {
+DoctorSchema.methods.comparePassword = async function (canditatePassword) {
 	const isMatch = await bcrypt.compare(canditatePassword, this.password);
 	return isMatch;
 };
 
-PatientSchema.methods.createJWT = function () {
+DoctorSchema.methods.createJWT = function () {
 	return jwt.sign(
-		{ id: this._id, name: this.name, surname: this.surname },
+		{
+			id: this._id,
+			name: this.name,
+			surname: this.surname,
+		},
 		process.env.JWT_SECRET,
 		{
 			expiresIn: process.env.JWT_LIFETIME,
@@ -52,4 +75,4 @@ PatientSchema.methods.createJWT = function () {
 	);
 };
 
-module.exports = mongoose.model("Patient", PatientSchema);
+module.exports = mongoose.model("Doctor", DoctorSchema);
