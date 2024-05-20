@@ -15,9 +15,10 @@ const appointRouter = require("./routes/appointmentRoute");
 
 const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
+const authMiddleware = require("./middleware/authentication");
 
 app.use("/api/auth", authRouter);
-app.use("/api", appointRouter);
+app.use("/api", authMiddleware, appointRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
