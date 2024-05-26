@@ -1,6 +1,6 @@
 const Patient = require("../models/Patient");
 const Doctor = require("../models/Doctor");
-const { createCustomError } = require("../errors/custom-api");
+const { BadRequestError, UnauthenticatedError } = require("../errors");
 
 const registerPatient = async (req, res) => {
 	const patient = await Patient.create({ ...req.body });
@@ -14,13 +14,17 @@ const loginPatient = async (req, res) => {
 	const { email, password } = req.body;
 
 	if (!email || !password) {
-		throw createCustomError("Please provide email and password", 200);
+		throw new BadRequestError("Please provide email and password");
 	}
 
 	const patient = await Patient.findOne({ email });
+	if (!patient) {
+		throw new UnauthenticatedError("Patient doesn`t exist");
+	}
+
 	const isPasswordCorrect = await patient.comparePassword(password);
 	if (!isPasswordCorrect) {
-		throw createCustomError("Wrong password", 200);
+		throw new UnauthenticatedError("Wrong password");
 	}
 
 	const token = patient.createJWT();
@@ -42,13 +46,17 @@ const loginDoctor = async (req, res) => {
 	const { email, password } = req.body;
 
 	if (!email || !password) {
-		throw createCustomError("Please provide email and password", 200);
+		throw new BadRequestError("Please provide email and password");
 	}
 
 	const doctor = await Doctor.findOne({ email });
+	if (!doctor) {
+		throw new UnauthenticatedError("Doctor doesn`t exist");
+	}
+
 	const isPasswordCorrect = await doctor.comparePassword(password);
 	if (!isPasswordCorrect) {
-		throw createCustomError("Wrong password", 200);
+		throw new UnauthenticatedError("Wrong password");
 	}
 
 	const token = doctor.createJWT();
