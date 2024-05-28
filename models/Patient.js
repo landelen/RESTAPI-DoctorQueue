@@ -43,13 +43,9 @@ PatientSchema.methods.comparePassword = async function (canditatePassword) {
 };
 
 PatientSchema.methods.createJWT = function () {
-	return jwt.sign(
-		{ id: this._id, name: this.name, surname: this.surname },
-		process.env.JWT_SECRET,
-		{
-			expiresIn: process.env.JWT_LIFETIME,
-		}
-	);
+	return jwt.sign({ id: this._id, role: "patient" }, process.env.JWT_SECRET, {
+		expiresIn: process.env.JWT_LIFETIME,
+	});
 };
 
 module.exports = mongoose.model("Patient", PatientSchema);

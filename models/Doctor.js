@@ -65,8 +65,7 @@ DoctorSchema.methods.createJWT = function () {
 	return jwt.sign(
 		{
 			id: this._id,
-			name: this.name,
-			surname: this.surname,
+			role: "doctor",
 		},
 		process.env.JWT_SECRET,
 		{

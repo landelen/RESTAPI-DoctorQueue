@@ -8,7 +8,7 @@ const {
 	getAppointment,
 	deleteAppointment,
 	updateAppointment,
-} = require("../controllers/appointment");
+} = require("../controllers/patient-controller");
 
 router.route("/").post(createAppointment).get(getAllAppointments);
 router

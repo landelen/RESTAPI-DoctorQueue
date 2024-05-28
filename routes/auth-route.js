@@ -7,7 +7,7 @@ const {
 	loginPatient,
 	registerDoctor,
 	loginDoctor,
-} = require("../controllers/authController");
+} = require("../controllers/auth-controller");
 
 router.post("/patient/register", registerPatient);
 router.post("/patient/login", loginPatient);
