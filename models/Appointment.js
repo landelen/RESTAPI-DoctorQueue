@@ -14,7 +14,7 @@ const AppointmentSchema = new mongoose.Schema(
 			required: [true, "Please provide patient"],
 		},
 		date: {
-			type: String,
+			type: Date,
 			required: [true, "Please provide date"],
 		},
 		timeInterval: {
