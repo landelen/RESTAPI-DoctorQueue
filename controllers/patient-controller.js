@@ -4,7 +4,6 @@ const { NotFoundError } = require("../errors");
 const createAppointment = async (req, res) => {
 	req.body.patient = req.user.userID;
 	const appointment = await Appointment.create(req.body);
-	console.log(appointment);
 	res.status(200).json(appointment);
 };
 

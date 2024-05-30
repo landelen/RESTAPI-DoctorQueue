@@ -4,9 +4,6 @@ require("express-async-errors");
 const express = require("express");
 const app = express();
 
-//mongodb
-const connectDB = require("./db/connect");
-
 app.use(express.json());
 
 //routers
@@ -26,17 +23,4 @@ app.use("/api/doctor", authMiddleware, authorizeDoctor, doctorRouter);
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
-const port = process.env.PORT || 8080;
-
-const start = async () => {
-	try {
-		await connectDB(process.env.MONGO_URL);
-		app.listen(port, () => {
-			console.log(`Server is listening on port ${port}`);
-		});
-	} catch (error) {
-		console.log(error);
-	}
-};
-
-start();
+module.exports = app;
