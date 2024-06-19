@@ -27,12 +27,7 @@ const cors = require("cors");
 const xss = require("xss-clean");
 const rateLimiter = require("express-rate-limit");
 
-app.use(
-	rateLimiter({
-		windowsMs: 10 * 60 * 1000,
-		max: 100,
-	})
-);
+app.use(rateLimiter({ windowsMs: 10 * 60 * 1000, max: 100 }));
 app.use(express.json());
 app.use(helmet());
 app.use(cors());

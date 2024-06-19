@@ -2,12 +2,7 @@ const express = require("express");
 
 const router = express.Router();
 
-const {
-	registerPatient,
-	loginPatient,
-	registerDoctor,
-	loginDoctor,
-} = require("../controllers/auth-controller");
+const { registerPatient, loginPatient, registerDoctor, loginDoctor } = require("../controllers/auth-controller");
 
 router.post("/patient/register", registerPatient);
 router.post("/patient/login", loginPatient);
